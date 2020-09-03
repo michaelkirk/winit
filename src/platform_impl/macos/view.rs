@@ -1011,6 +1011,7 @@ extern "C" fn scroll_wheel(this: &Object, _sel: Sel, event: id) {
                 MouseScrollDelta::LineDelta(x as f32, y as f32)
             }
         };
+        dbg!(delta);
         let phase = match event.phase() {
             NSEventPhase::NSEventPhaseMayBegin | NSEventPhase::NSEventPhaseBegan => {
                 TouchPhase::Started

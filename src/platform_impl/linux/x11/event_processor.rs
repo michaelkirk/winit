@@ -770,14 +770,18 @@ impl<T: 'static> EventProcessor<T> {
                                             window_id,
                                             event: MouseWheel {
                                                 device_id,
-                                                delta: match info.orientation {
-                                                    ScrollOrientation::Horizontal => {
-                                                        LineDelta(delta as f32, 0.0)
-                                                    }
-                                                    // X11 vertical scroll coordinates are opposite to winit's
-                                                    ScrollOrientation::Vertical => {
-                                                        LineDelta(0.0, -delta as f32)
-                                                    }
+                                                delta: {
+                                                    let delta = match info.orientation {
+                                                        ScrollOrientation::Horizontal => {
+                                                            LineDelta(delta as f32, 0.0)
+                                                        }
+                                                        // X11 vertical scroll coordinates are opposite to winit's
+                                                        ScrollOrientation::Vertical => {
+                                                            LineDelta(0.0, -delta as f32)
+                                                        }
+                                                    };
+                                                    dbg!(delta);
+                                                    delta
                                                 },
                                                 phase: TouchPhase::Moved,
                                                 modifiers,
@@ -1064,7 +1068,11 @@ impl<T: 'static> EventProcessor<T> {
                             callback(Event::DeviceEvent {
                                 device_id: did,
                                 event: DeviceEvent::MouseWheel {
-                                    delta: LineDelta(scroll_delta.0, scroll_delta.1),
+                                    delta: {
+                                        let delta = LineDelta(scroll_delta.0, scroll_delta.1);
+                                        dbg!(delta);
+                                        delta
+                                    },
                                 },
                             });
                         }

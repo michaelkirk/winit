@@ -174,13 +174,18 @@ pub fn implement_pointer(
                                 let delta = LogicalPosition::new(x as f64, y as f64)
                                     .to_physical(scale_factor);
                                 sink.send_window_event(
-                                    WindowEvent::MouseWheel {
-                                        device_id: crate::event::DeviceId(
-                                            crate::platform_impl::DeviceId::Wayland(DeviceId),
-                                        ),
-                                        delta: MouseScrollDelta::PixelDelta(delta),
-                                        phase: TouchPhase::Moved,
-                                        modifiers: modifiers_tracker.lock().unwrap().clone(),
+                                    {
+                                        let mouse_scroll_delta =
+                                            MouseScrollDelta::PixelDelta(delta);
+                                        dbg!(mouse_scroll_delta);
+                                        WindowEvent::MouseWheel {
+                                            device_id: crate::event::DeviceId(
+                                                crate::platform_impl::DeviceId::Wayland(DeviceId),
+                                            ),
+                                            delta: mouse_scroll_delta,
+                                            phase: TouchPhase::Moved,
+                                            modifiers: modifiers_tracker.lock().unwrap().clone(),
+                                        }
                                     },
                                     wid,
                                 );
@@ -211,7 +216,12 @@ pub fn implement_pointer(
                                         device_id: crate::event::DeviceId(
                                             crate::platform_impl::DeviceId::Wayland(DeviceId),
                                         ),
-                                        delta: MouseScrollDelta::LineDelta(x, y),
+                                        delta: {
+                                            let mouse_scroll_delta =
+                                                MouseScrollDelta::LineDelta(x, y);
+                                            dbg!(mouse_scroll_delta);
+                                            mouse_scroll_delta
+                                        },
                                         phase: axis_state,
                                         modifiers: modifiers_tracker.lock().unwrap().clone(),
                                     },
